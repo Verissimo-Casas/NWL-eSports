@@ -56,6 +56,7 @@ return (
           <strong className="font-bold text-white block">League of Legends</strong>
           <span className="text-zinc-300 text-sm block">4 anúncios</span>
         </div>
+        {/* PAROU 48:00 */}
       </a>
     </div>
   </div>
