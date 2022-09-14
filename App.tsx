@@ -8,7 +8,8 @@ import {
   Inter_900Black
  } from '@expo-google-fonts/inter';
 
-import { HOME } from './src/screens/Home/index';
+import { Home } from './src/screens/Home';
+import { Loading } from './src/components/Loading';
 import { Background } from './src/components/Background';
 
 export default function App() {
@@ -27,7 +28,7 @@ export default function App() {
         backgroundColor="transparent"
         translucent
       />
-      {fontLoaded ?  <HOME />}
+      {fontLoaded ? <Home /> : <Loading />}
     </Background>
   );
 }
