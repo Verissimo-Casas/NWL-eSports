@@ -1,10 +1,12 @@
 import Express from "express";
+import cors from "cors";
 import { PrismaClient } from "@prisma/client";
-import { convertHourStringToMinutes } from "./utils/convert-hour-string-to-minutes";
+import { convertHourStringToMinutes, convertMinutesToTime } from "./utils/time";
 
 const app = Express();
 
 app.use(Express.json());
+app.use(cors());
 
 const prisma = new PrismaClient({
   log: ["query", "info", "warn"],
@@ -27,7 +29,7 @@ app.post('/games/:id/ad', async (request, response) => {
   const gameId = request.params.id
   const body: any = request.body
 
-  //TODO: Validate fields (we can use the Zod library for example)
+  // TODO: Validate fields (we can use the Zod library for example)
   const ad = await prisma.ad.create({
       data: {
         gameId,
@@ -41,7 +43,7 @@ app.post('/games/:id/ad', async (request, response) => {
       },
   })
 
-  return response.json().status(201)
+  return response.json(ad).status(201)
 })
 
 app.get("/games/:id/ads", async (request, response) => {
@@ -53,8 +55,8 @@ app.get("/games/:id/ads", async (request, response) => {
       name : true,
       yearsPlaying : true,
       weekDays : true,
-      hoursStart : true,
-      hoursEnd : true,
+      hourStart : true,
+      hourEnd : true,
       useVoiceChannel : true,
     },
     where: {
@@ -69,6 +71,8 @@ app.get("/games/:id/ads", async (request, response) => {
     return {
       ...ad,
       weekDays: ad.weekDays.split(','),
+      hourStart: convertMinutesToTime(ad.hourStart),
+      hourEnd: convertMinutesToTime(ad.hourEnd),
     }
   }));
 });
@@ -90,3 +94,4 @@ app.get("/ads/:id/discord", async (request, response) => {
 });
 
 app.listen(3000);
+
